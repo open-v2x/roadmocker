@@ -1,0 +1,185 @@
+header {
+  margin-bottom: 20px;
+  border-bottom: solid 2px #000000;
+  background-image: -moz-linear-gradient(top, #f8f8f8 0%, #f2f2f2 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f8f8f8), color-stop(100%, #f2f2f2));
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0%, #f2f2f2 100%);
+  background-image: -o-linear-gradient(top, #f8f8f8 0%, #f2f2f2 100%);
+  background-image: -ms-linear-gradient(top, #f8f8f8 0%, #f2f2f2 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0%, #f2f2f2 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8f8f8', endColorstr='#f2f2f2', GradientType=0);
+}
+
+.icon {
+  display: inline-block;
+  font-style: normal;
+  vertical-align: baseline;
+  text-align: center;
+  text-transform: none;
+  line-height: 1;
+}
+
+.icon:before {
+  font-family: Glyphicons Halflings !important;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+.color-red {
+  color: #f04134;
+}
+
+.color-green {
+  color: #5cb85c;
+}
+
+.button-align {
+  margin-top: 23px;
+}
+
+#state > .icon:before {
+  vertical-align: text-bottom;
+}
+
+#publishRetain {
+  display: block;
+  margin-top: 10px;
+}
+
+td > i {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.messages-list {
+  max-height: 270px;
+  overflow-y: scroll;
+}
+
+.messages-list li {
+  margin-bottom: 10px;
+}
+
+.messages-list .message {
+  border: solid 1px #cccccc;
+}
+
+.message .small-text {
+  color: #bababa;
+  font-size: 12px;
+}
+
+.message .message-content {
+  -ms-word-wrap: break-word;
+  word-wrap: break-word;
+  font-size: 18px;
+}
+
+.topic-item {
+  border-left: 10px solid #9a9a9a;
+  margin-bottom: 8px;
+}
+
+.topic-item .content {
+  position: relative;
+  border: 1px solid #ccc;
+  padding-left: 8px;
+}
+
+.qos {
+  padding: 3px 0;
+  color: #bababa;
+  font-size: 12px;
+}
+
+.topic {
+  padding: 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.close {
+  margin-right: 8px;
+}
+
+#clearMessage {
+  float: right;
+  cursor: pointer;
+  color: #c9302c;
+}
+
+#clearMessage:hover {
+  text-decoration: none;
+}
+
+.form-heartbeat-select {
+  display: inline-block;
+  width: 50%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.form-heartbeat-btn-container {
+  display: flex;
+  float: left;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.heartbeats-list{
+  margin: 30px 0;
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* table */
+.bootstrap-table .btn {
+  padding: 2px;
+  font-size: 12px;
+}
+
+.table>thead>tr>th, .table>tbody>tr>td, .table>tbody>tr>th {
+  padding: 4px;
+  padding-left: 8px;
+}
+
+#clearSendMessage {
+  float: right;
+  cursor: pointer;
+  color: #c9302c;
+}
+
+#clearSendMessage:hover {
+  text-decoration: none;
+}
+
+.stop {
+  width: 50px;
+}
+
+.stop-hidden {
+  display: none;
+}
+
+.stop-show {
+  display: inline-block;
+}

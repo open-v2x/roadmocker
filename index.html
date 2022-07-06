@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>RSE Similator</title>
+    <!-- <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="./lib/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./lib/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"/>
+    <link rel="stylesheet" href="./lib/bootstrap-table/css/bootstrap-table.min.css"/>
+    <link rel="stylesheet" href="./main.css"/>
+</head>
+<body>
+<header>
+    <div class="container">
+        <h1>RSE Similator</h1>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <a data-toggle="collapse" href="#connectionContent" aria-controls="connectionContent"
+                                   style="color: inherit"> Connection </a>
+                            </div>
+                            <div class="col-md-4">
+                    <span id="state" class="color-red">
+                      <i class="icon glyphicon-globe"></i>
+                      <span class="text">disconnected</span>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </h2>
+            </div>
+            <div id="connectionContent" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form id="connectionForm">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="host">Host</label>
+                                    <input class="form-control" id="host" name="host" value="106.15.193.98"/>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label for="path">Path</label>
+                                    <input class="form-control" id="path" name="path" value="/mqtt"/>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label for="port">Port</label>
+                                    <input class="form-control" id="port" name="port" value="15675"/>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="clientId">ClientID</label>
+                                    <input class="form-control" id="clientId" name="clientId" value="RSU-01"/>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <button id="connectButton" class="btn btn-primary button-align">Connect</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="username">Username</label>
+                                    <input class="form-control" id="username" name="username" value="root"/>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                           value="abc@1234"/>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label for="keepAlive">KeepAlive</label>
+                                    <input class="form-control" id="keepAlive" name="keepalive"/>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#publish" aria-controls="connectionContent"> Publish </a>
+                        </h2>
+                    </div>
+                    <div id="publish" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form id="publishForm">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="publishTopic">Topic</label>
+                                            <input class="form-control" name="publishTopic" id="publishTopic"
+                                                   value="test/topic/1"/>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="publishQoS">QoS</label>
+                                            <select class="form-control" name="publishQoS" id="publishQoS">
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="publishRetain">Retain</label>
+                                            <input type="checkbox" id="publishRetain" name="publishRetain"/>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <button id="publishButton" class="btn btn-primary button-align">Publish
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label for="publishMessage">Message</label>
+                                            <textarea class="form-control" id="publishMessage"
+                                                      name="publishMessage"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#messages" aria-controls="connectionContent"> Receive
+                                Messages </a>
+                            <a id="clearMessage" class="icon glyphicon-trash"></a>
+                        </h2>
+                    </div>
+                    <div id="messages" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul id="messageList" class="messages-list"></ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- dataset start -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#dataset" aria-controls="connectionContent"> DataSet </a>
+                        </h2>
+                    </div>
+                    <div id="dataset" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form id="datasetForm">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-4 form-group pull-left">
+                                            <label>Topic Delimiter</label>
+                                            <input class="form-control" name="topicDelimiter"
+                                                   id="topicDelimiter"
+                                                   value="/"/>
+                                        </div>
+                                        <div class="col-md-2 form-group pull-right">
+                                            <button id="download" class="btn btn-warning button-align">Download</button>
+                                        </div>
+                                        <div class="col-md-2 form-group pull-right">
+                                            <button id="publishDataSetButton" class="btn btn-primary button-align">
+                                                Publish
+                                            </button>
+                                        </div>
+                                        <table id="tb_dataset"></table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- dataset end -->
+                <!-- send message start -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#sendMessages" aria-controls="connectionContent"> Send
+                                Messages </a>
+                            <a id="clearSendMessage" class="icon glyphicon-trash"></a>
+                        </h2>
+                    </div>
+                    <div id="sendMessages" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul id="sendMessageList" class="messages-list"></ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- send message end -->
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#subscriptions" aria-controls="connectionContent">
+                                Subscriptions </a>
+                        </h2>
+                    </div>
+                    <div id="subscriptions" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form id="subscriptionForm">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label for="subscribeTopic">Topic</label>
+                                            <input class="form-control" name="subscribeTopic" id="subscribeTopic"
+                                                   value="test/topic/#"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="subscribeQoS">QoS</label>
+                                            <select class="form-control" name="subscribeQoS" id="subscribeQoS">
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="color">Color</label>
+                                            <input id="color" class="form-control" name="color" value="#f00"/>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <button id="subscribeButton" class="btn btn-primary button-align">
+                                                Subscribe
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="container-fluid">
+                                <ul id="topicList"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a
+                                    data-toggle="collapse"
+                                    href="#heartbeat"
+                                    aria-expanded="connectionContent"
+                            >
+                                Heartbeat
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="heartbeat" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form id="rsuHeartbeat">
+                                <div class="container-fluid">
+                                    <label for="rates">Rates</label>
+                                    <div class="row">
+                                        <div class="col-md-12 form-inline">
+                                            <input id="heartbeatInput" type="text" class="form-control" value="10">
+                                            <span>秒</span>
+                                        </div>
+                                        <div class="form-heartbeat-btn-container">
+                                            <button
+                                                    id="startHeartbeatButton"
+                                                    class="btn btn-primary button-align form-heartbeat-btn"
+                                            >
+                                                Start
+                                            </button>
+                                            <button
+                                                    id="pauseHeartbeatButton"
+                                                    class="btn btn-warning button-align form-heartbeat-btn"
+                                            >
+                                                Pause
+                                            </button>
+                                            <button
+                                                    id="clearHeartbeatButton"
+                                                    class="btn btn-info button-align form-heartbeat-btn"
+                                            >
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="heartbeatListContainer" class="row-md-12">
+                                        <ul id="heartbeatList" class="heartbeats-list list-group"></ul>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a
+                                    data-toggle="collapse"
+                                    href="#options"
+                                    aria-controls="connectionContent"
+                            >
+                                RSU Setting
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="options" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <form id="rsuOptions">
+                                <div class="container-fluid">
+                                    <div class="row form-group">
+                                        <button id="subscribeSettingButton" class="btn btn-info button-align col-md-12">
+                                            Listen
+                                        </button>
+                                    </div>
+                                    <div class="row">
+                                        <label>BSM</label>
+                                        <div class="col-md-12 form-group">
+                                            <label for="bsmSampleMode">采样方式</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="bsmSampleMode"
+                                                    id="bsmSampleMode"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="bsmSampleRate">采样率</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="bsmSampleRate"
+                                                    id="bsmSampleRate"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="bsmUpLimit">上行转发上线</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="bsmUpLimit"
+                                                    id="bsmUpLimit"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="bsmFilters">过滤规则</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="bsmFilters"
+                                                    id="bsmFilters"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label>RSI</label>
+                                        <div class="col-md-12 form-group">
+                                            <label for="rsiFilters">过滤规则</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="rsiFilters"
+                                                    id="rsiFilters"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label>RSM</label>
+                                        <div class="col-md-12 form-group">
+                                            <label for="rsmUpLimit">上行转发上线</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="rsmUpLimit"
+                                                    id="rsmUpLimit"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="rsmFilters">过滤规则</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="rsmFilters"
+                                                    id="rsmFilters"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label>MAP</label>
+                                        <div class="col-md-12 form-group">
+                                            <label for="mapUpLimit">上行转发上线</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="mapUpLimit"
+                                                    id="mapUpLimit"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="mapFilters">过滤规则</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="mapFilters"
+                                                    id="mapFilters"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label>SPAT</label>
+                                        <div class="col-md-12 form-group">
+                                            <label for="spatUpLimit">上行转发上线</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="spatUpLimit"
+                                                    id="spatUpLimit"
+                                                    value=""
+                                            />
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="spatFilters">过滤规则</label>
+                                            <input
+                                                    class="form-control"
+                                                    name="spatFilters"
+                                                    id="spatFilters"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
+<!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
+<script src="./lib/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script> -->
+<script src="./lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./lib/mqtt/mqtt-2.11.0.min.js"></script>
+<script src="./lib/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<script src="./lib/bootstrap-table/js/bootstrap-table.min.js"></script>
+<script src="./main.js"></script>
+</body>
+</html>
