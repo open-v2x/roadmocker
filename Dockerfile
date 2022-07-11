@@ -6,7 +6,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY roadmocker /usr/share/nginx/html
 COPY test_data.tar.gz /usr/share/nginx/html/
-COPY roadmocker/deploy/default.conf /etc/nginx/conf.d/default.conf
+COPY deploy/default.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir test-data
 RUN tar zxvf test_data.tar.gz -C test-data && chmod 644 test-data/*.json && rm -rf test-data/.*json* && rm -rf test-data/.*DS_Store*
