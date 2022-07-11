@@ -4,7 +4,7 @@ LABEL purpose="ROADMOCKER"
 
 WORKDIR /usr/share/nginx/html
 
-COPY roadmocker /usr/share/nginx/html
+COPY . /usr/share/nginx/html
 COPY test_data.tar.gz /usr/share/nginx/html/
 COPY deploy/default.conf /etc/nginx/conf.d/default.conf
 
