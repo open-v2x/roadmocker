@@ -24,8 +24,8 @@ const topicReplace = (topic, delimiter = "/") => {
 // Msg_VIR：车辆意图和请求（Message: Vehicle Intention And Request）
 const dataSetConfig = (esn = "", delimiter = "/") => {
     return [
-        {name: "RSU_INFO", topic: topicReplace(`V2X.RSU.INFO.UP`, delimiter)},
-        {name: "RSU_MAP", topic: topicReplace(`V2X.RSU.${esn}.MAP.UP`, delimiter)},
+        {name: "RSU_INFO", topic: topicReplace(`V2X.RSU.INFO.UP`, delimiter), description: "RSU上报信息"},
+        {name: "RSU_MAP", topic: topicReplace(`V2X.RSU.${esn}.MAP.UP`, delimiter), description: "MAP上报数据"},
         {name: "RSI_data", topic: topicReplace(`V2X.RSU.${esn}.RSI.UP.DAWNLINE`, delimiter), description: "RSI上报数据"},
         {name: "simulation_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "SUMO仿真轨迹数据"},
         {name: "multi_source_fusion_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "多设备融合算法，测试轨迹数据"},
