@@ -24,12 +24,12 @@ const topicReplace = (topic, delimiter = "/") => {
 // Msg_VIR：车辆意图和请求（Message: Vehicle Intention And Request）
 const dataSetConfig = (esn = "", delimiter = "/") => {
     return [
-        {name: "RSU_INFO", topic: topicReplace(`V2X.RSU.INFO.UP`, delimiter), description: "RSU上报信息"},
-        {name: "RSU_MAP", topic: topicReplace(`V2X.RSU.${esn}.MAP.UP`, delimiter), description: "MAP上报数据"},
+        {name: "RSU_INFO", topic: topicReplace(`V2X.RSU.INFO.UP`, delimiter), description: "上报RSU信息"},
+        {name: "RSU_MAP", topic: topicReplace(`V2X.RSU.${esn}.MAP.UP`, delimiter), description: "上报MAP信息"},
         {name: "RSI_data", topic: topicReplace(`V2X.RSU.${esn}.RSI.UP.DAWNLINE`, delimiter), description: "RSI上报数据"},
-        {name: "simulation_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "SUMO仿真轨迹数据"},
-        {name: "multi_source_fusion_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "多设备融合算法，测试轨迹数据"},
-        {name: "complement_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "轨迹补全算法，测试轨迹数据"},
+        {name: "video_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "视频检测数据"},
+        {name: "radar_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "毫米波雷达检测数据"},
+        {name: "multi_source_fusion_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "雷视融合算法，测试轨迹数据"},
         {name: "ICW_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP`, delimiter), description: "交叉口车辆间碰撞预警场景，轨迹数据"},
         {name: "VPTC_CW_track_stright", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "弱势交通参与者碰撞预警场景，车辆直行"},
         {name: "VPTC_CW_track_turn", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "弱势交通参与者碰撞预警场景，车辆转向"},
@@ -347,7 +347,7 @@ function handlePublishDataset() {
                     clearInterval(interval);
                     rsmInterval = rsmInterval.filter((item) => item.name !== name);
                 }
-            }, 500);
+            }, 100);
             rsmInterval.push({name, interval});
             addStopButton(name);
         } else {
@@ -644,12 +644,13 @@ function getRandomIdName() {
  */
 const defaultData = [
     "RSI_data",
-    "simulation_track",
     "multi_source_fusion_track",
     "complement_track",
     "ICW_track",
     "VPTC_CW_track_stright",
-    "VPTC_CW_track_turn"
+    "VPTC_CW_track_turn",
+    "video_track",
+    "radar_track",
 ];
 
 function isIntervalData(name) {
