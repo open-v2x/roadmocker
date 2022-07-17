@@ -15,7 +15,7 @@ let client, protol;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
 
-const DATASET_SERVER = "http://106.15.193.98:6688/test-data";
+const DATASET_SERVER = "http://139.196.13.9:6688/test-data";
 
 const topicReplace = (topic, delimiter = "/") => {
     return topic.replace(new RegExp("\\.",("gm")), delimiter);
