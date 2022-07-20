@@ -21,7 +21,7 @@ steps:
         from_secret: DOCKER_PASSWORD
       DOCKER_REGISTRY: docker.io
       DOCKER_ORG: openv2x
-      DOCKER_TAG: latest
+      DOCKER_TAG: albany
     commands:
       - env
       - mkdir -pv $HOMEPATH/.docker/buildx/instances
@@ -46,9 +46,9 @@ steps:
     commands:
       - ssh v2x-release "docker stop roadmocker || true"
       - ssh v2x-release "docker rm roadmocker || true"
-      - ssh v2x-release "docker rmi openv2x/roadmocker:latest || true"
-      - ssh v2x-release "docker pull openv2x/roadmocker:latest"
-      - ssh v2x-release "docker run -d -p 6688:80 --name="rse-simulator" -v /etc/localtime:/etc/localtime openv2x/roadmocker:latest || true"
+      - ssh v2x-release "docker rmi openv2x/roadmocker:albany || true"
+      - ssh v2x-release "docker pull openv2x/roadmocker:albany"
+      - ssh v2x-release "docker run -d -p 6688:80 --name="rse-simulator" -v /etc/localtime:/etc/localtime openv2x/roadmocker:albany || true"
   - name: email on success
     commands:
       - bash -x v2x-email-success.sh ${DRONE_COMMIT} ${DRONE_COMMIT_BRANCH} "${DRONE_COMMIT_AUTHOR_NAME}" ${DRONE_REPO_OWNER} ${DRONE_REPO_NAME} ${DRONE_COMMIT_AUTHOR_EMAIL} ${DRONE_BUILD_NUMBER} ${DRONE_BUILD_STARTED}
@@ -65,4 +65,4 @@ trigger:
   event:
     - push
   branch:
-    - master
+    - albany
