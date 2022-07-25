@@ -33,3 +33,4 @@ jobs:
             GIT_BRANCH=${{ github.ref_name }}
             REPO_URL=https://github.com/open-v2x/roadmocker
             GIT_COMMIT=${{ github.sha }}
+            
