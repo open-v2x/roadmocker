@@ -113,6 +113,14 @@ function initTable() {
         },
         onUncheck: function (row, $element) {
             checkedData = checkedData.filter((it) => it.name !== row.name);
+        },
+        onCheckAll: function(rows, $element) {
+            rows.forEach(row => {
+                getCheckedRowData(row)
+            })
+        },
+        onUncheckAll: function () {
+            checkedData = []
         }
     });
 }
