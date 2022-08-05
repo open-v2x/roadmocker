@@ -10,6 +10,7 @@ let connectionForm,
     tableData = [], // 列表项
     checkedData = [], // 所有已勾选的 json 数据
     rsmInterval = [];
+    loadingData = new Set(); // 加载列表
 
 let client, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
@@ -42,7 +43,8 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
 
 $(function () {
     host = window.location.hostname;
-    data_set_server = window.location.href + 'test-data'
+    // data_set_server = window.location.href + 'test-data'
+    data_set_server = "http://47.100.126.13:6688/test-data"
     $("#host").val(host);
 
     colorPicker = $("#color");
@@ -101,9 +103,9 @@ function initTable() {
                     const {name} = row;
 
                     var result = `<a href="${data_set_server}/${name}.json" target="blank">
-                          <button type="button" class="btn btn-primary">Preview</button>
-                        </a>
-                        `;
+                          <button id="preview-${name}" type="button" class="btn btn-primary">Preview</button>
+                      </a>`;
+                    result += `<button type="button" id="loading-${name}" class="btn btn-primary loading-hidden" disabled>Loading</button>`
                     result += `<button type="button" id="stop-${name}" class="btn btn-danger stop stop-hidden" onclick="stopPublish('${name}')">Stop</button>`;
 
                     return result;
@@ -118,11 +120,11 @@ function initTable() {
         },
         onCheckAll: function(rows, $element) {
             rows.forEach(row => {
-                getCheckedRowData(row)
+                getCheckedRowData(row);
             })
         },
         onUncheckAll: function () {
-            checkedData = []
+            checkedData = [];
         }
     });
 }
@@ -138,13 +140,27 @@ function stopPublish(name) {
     }
 }
 
+function loadingAni(name) {
+    loadingData.add(name);
+    $("#loading-" + name).removeClass("loading-hidden")
+    $("#preview-" + name).addClass("preview-hidden")
+}
+
+function loadedAni(name) {
+    loadingData.delete(name)
+    $("#loading-" + name).addClass("loading-hidden")
+    $("#preview-" + name).removeClass("preview-hidden")
+}
+
 function getCheckedRowData(row) {
     const {name} = row;
+    loadingAni(name)
     $.ajax({
         url: `${data_set_server}/${name}.json`,
         type: "GET",
         success: function (res) {
             checkedData.push({name, data: res});
+            loadedAni(name)
         }
     });
 }
@@ -218,7 +234,6 @@ function handleHeartbeat(data) {
 }
 
 function handleRsuOptions(topic, msg, packet) {
-    console.log('收到的数据', topic, msg.toString(), packet);
     const result = JSON.parse(msg.toString()) || msg.toString();
     $("#bsmSampleMode").val(result.bsmConfig.sampleMode);
     $("#bsmSampleRate").val(`${result.bsmConfig.sampleRate / 100}%`);
