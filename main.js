@@ -104,7 +104,7 @@ function initTable() {
                     var result = `<a href="${data_set_server}/${name}.json" target="blank">
                           <button id="preview-${name}" type="button" class="btn btn-primary">Preview</button>
                       </a>`;
-                    result += `<button type="button" id="loading-${name}" class="btn btn-primary loading-hidden" disabled>Loading</button>`
+                    result += `<button type="button" id="loading-${name}" class="btn btn-warning loading-hidden" disabled>Loading</button>`
                     result += `<button type="button" id="stop-${name}" class="btn btn-danger stop stop-hidden" onclick="stopPublish('${name}')">Stop</button>`;
 
                     return result;
