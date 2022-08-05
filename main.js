@@ -43,8 +43,7 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
 
 $(function () {
     host = window.location.hostname;
-    // data_set_server = window.location.href + 'test-data'
-    data_set_server = "http://47.100.126.13:6688/test-data"
+    data_set_server = window.location.href + 'test-data'
     $("#host").val(host);
 
     colorPicker = $("#color");
