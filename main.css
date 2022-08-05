@@ -183,3 +183,11 @@ td > i {
 .stop-show {
   display: inline-block;
 }
+
+.preview-hidden {
+  display: none;
+}
+
+.loading-hidden {
+  display: none;
+}
