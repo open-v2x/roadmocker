@@ -11,6 +11,7 @@ let connectionForm,
     checkedData = [], // 所有已勾选的 json 数据
     rsmInterval = [];
     loadingData = new Set(); // 加载列表
+    ajaxList = new Map();
 
 let client, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
@@ -104,7 +105,7 @@ function initTable() {
                     var result = `<a href="${data_set_server}/${name}.json" target="blank">
                           <button id="preview-${name}" type="button" class="btn btn-primary">Preview</button>
                       </a>`;
-                    result += `<button type="button" id="loading-${name}" class="btn btn-primary loading-hidden" disabled>Loading</button>`
+                    result += `<button type="button" id="loading-${name}" class="btn btn-warning loading-hidden" disabled>Loading</button>`
                     result += `<button type="button" id="stop-${name}" class="btn btn-danger stop stop-hidden" onclick="stopPublish('${name}')">Stop</button>`;
 
                     return result;
@@ -115,6 +116,10 @@ function initTable() {
             getCheckedRowData(row);
         },
         onUncheck: function (row, $element) {
+            if (loadingData.has(row.name)){
+                loadingData.delete(row.name);
+                loadedAni(row.name);
+            }
             checkedData = checkedData.filter((it) => it.name !== row.name);
         },
         onCheckAll: function(rows, $element) {
@@ -124,6 +129,11 @@ function initTable() {
         },
         onUncheckAll: function () {
             checkedData = [];
+            for(let xhr of ajaxList.values()) {
+                xhr.abort()
+            }
+            loadingData.clear();
+            ajaxList.clear()
         }
     });
 }
@@ -145,8 +155,15 @@ function loadingAni(name) {
     $("#preview-" + name).addClass("preview-hidden")
 }
 
-function loadedAni(name) {
-    loadingData.delete(name)
+function loadedAni(name, res) {
+    const xhr = ajaxList.get(name)
+    xhr.abort()
+    ajaxList.delete(name)
+    // 正常请求才会放入发送里
+    if (loadingData.has(name)) {
+        loadingData.delete(name);
+        checkedData.push({name, data: res});
+    }
     $("#loading-" + name).addClass("loading-hidden")
     $("#preview-" + name).removeClass("preview-hidden")
 }
@@ -154,14 +171,15 @@ function loadedAni(name) {
 function getCheckedRowData(row) {
     const {name} = row;
     loadingAni(name)
-    $.ajax({
+    const xhr = $.ajax({
         url: `${data_set_server}/${name}.json`,
         type: "GET",
         success: function (res) {
-            checkedData.push({name, data: res});
-            loadedAni(name)
+            loadedAni(name, res)
         }
     });
+    ajaxList.set(name, xhr)
+
 }
 
 function toggleConnect(event) {
