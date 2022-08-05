@@ -11,11 +11,9 @@ let connectionForm,
     checkedData = [], // 所有已勾选的 json 数据
     rsmInterval = [];
 
-let client, protol;
+let client, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-
-const DATASET_SERVER = "http://139.196.13.9:6688/test-data";
 
 const topicReplace = (topic, delimiter = "/") => {
     return topic.replace(new RegExp("\\.",("gm")), delimiter);
@@ -43,6 +41,10 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
 };
 
 $(function () {
+    host = window.location.hostname;
+    data_set_server = window.location.href + 'test-data'
+    $("#host").val(host);
+
     colorPicker = $("#color");
     colorPicker.colorpicker();
     $("#connectButton").click(toggleConnect);
@@ -98,7 +100,7 @@ function initTable() {
                 formatter: function (value, row, index) {
                     const {name} = row;
 
-                    var result = `<a href="${DATASET_SERVER}/${name}.json" target="blank">
+                    var result = `<a href="${data_set_server}/${name}.json" target="blank">
                           <button type="button" class="btn btn-primary">Preview</button>
                         </a>
                         `;
@@ -113,6 +115,14 @@ function initTable() {
         },
         onUncheck: function (row, $element) {
             checkedData = checkedData.filter((it) => it.name !== row.name);
+        },
+        onCheckAll: function(rows, $element) {
+            rows.forEach(row => {
+                getCheckedRowData(row)
+            })
+        },
+        onUncheckAll: function () {
+            checkedData = []
         }
     });
 }
@@ -131,7 +141,7 @@ function stopPublish(name) {
 function getCheckedRowData(row) {
     const {name} = row;
     $.ajax({
-        url: `${DATASET_SERVER}/${name}.json`,
+        url: `${data_set_server}/${name}.json`,
         type: "GET",
         success: function (res) {
             checkedData.push({name, data: res});
