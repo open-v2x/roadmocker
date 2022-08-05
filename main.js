@@ -41,8 +41,8 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
 };
 
 $(function () {
-    host = window.location.href;
-    data_set_server = host + '/test-data'
+    host = window.location.hostname;
+    data_set_server = window.location.href + 'test-data'
     $("#host").val(host);
 
     colorPicker = $("#color");
