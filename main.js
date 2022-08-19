@@ -212,6 +212,7 @@ function toggleConnect(event) {
 
         client.on("error", function (err) {
             alert("There has some problems when create connection!\n Error is:" + err.message);
+            client.end();
         });
 
         client.on("message", handleMessage);
