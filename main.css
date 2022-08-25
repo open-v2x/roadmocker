@@ -191,3 +191,14 @@ td > i {
 .loading-hidden {
   display: none;
 }
+
+.form-client-hint {
+  margin-top: 5px;
+  color: red;
+  font-size: 10px;
+  display: none;
+}
+
+.display-show {
+  display: inline-block;
+}
