@@ -17,6 +17,8 @@ let client, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
 
+const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/)
+
 const topicReplace = (topic, delimiter = "/") => {
     return topic.replace(new RegExp("\\.",("gm")), delimiter);
 }
@@ -70,7 +72,7 @@ $(function () {
     //   $('#port').val(80);
     // }
 
-    $("#clientId").val("RSU-" + (((1 + Math.random()) * 0x10000000) | 0).toString(16));
+    $("#clientId").val("RSU_" + (((1 + Math.random()) * 0x10000000) | 0).toString(16));
     initTable();
 });
 
@@ -195,6 +197,12 @@ function toggleConnect(event) {
     } else {
         connectionForm = connectionForm || $("#connectionForm");
         const formData = convertFormData(connectionForm.serializeArray());
+        if (!clientIdReg.test(formData.clientId)){
+            $(`#clientIdHint`).addClass("display-show");
+            return false;
+        }
+
+        $(`#clientIdHint`).removeClass("display-show");
 
         client = mqtt.connect(`${protol}://${formData.host}:${formData.port}${formData.path || ""}`, {
             username: formData.username,
@@ -213,6 +221,7 @@ function toggleConnect(event) {
         client.on("error", function (err) {
             alert("There has some problems when create connection!\n Error is:" + err.message);
             client.end();
+            client = null;
         });
 
         client.on("message", handleMessage);
@@ -412,6 +421,14 @@ function handlePublishDataset() {
         const delimiter = datasetFormData.topicDelimiter;
 
         const topic = dataSetConfig(rsu, delimiter).find((it) => it.name === name).topic;
+
+        if (name === 'RSU_INFO') {
+            try {
+                msg = handleFormatRsuInfo(msg, rsu)     
+            } catch (error) {
+                console.log('RSU_INFO数据替换出错' + error)                
+            }
+        }
 
         if (client) {
             client.publish(topic, msg, {});
@@ -721,4 +738,19 @@ function postCheckedData(_data) {
     }
 
     return [_data, []];
+}
+
+/**
+ * 数据处理
+ * 替换RSU_INFO 的 rsuId、 rsuEsn、 rsuName 为clientId
+ * @param {*} _data
+ * @returns {Array}
+ */
+function handleFormatRsuInfo(msg, tempStr) {
+    const m = `${msg}`
+    const data = JSON.parse(m)
+    data.rsuId = tempStr
+    data.rsuEsn = tempStr
+    data.rsuName = tempStr
+    return JSON.stringify(data)
 }
