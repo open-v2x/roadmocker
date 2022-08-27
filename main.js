@@ -13,7 +13,7 @@ let connectionForm,
     loadingData = new Set(); // 加载列表
     ajaxList = new Map();
 
-let client, protol, host, data_set_server;
+let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
 
@@ -216,6 +216,7 @@ function toggleConnect(event) {
             state.attr("class", "color-green");
             state.children("span").text("connected");
             $(event.target).text("Disconnect");
+            curClientId = formData.clientId
         });
 
         client.on("error", function (err) {
@@ -424,7 +425,7 @@ function handlePublishDataset() {
 
         if (name === 'RSU_INFO') {
             try {
-                msg = handleFormatRsuInfo(msg, rsu)     
+                msg = handleFormatRsuInfo(msg)     
             } catch (error) {
                 console.log('RSU_INFO数据替换出错' + error)                
             }
@@ -746,11 +747,11 @@ function postCheckedData(_data) {
  * @param {*} _data
  * @returns {Array}
  */
-function handleFormatRsuInfo(msg, tempStr) {
+function handleFormatRsuInfo(msg) {
     const m = `${msg}`
     const data = JSON.parse(m)
-    data.rsuId = tempStr
-    data.rsuEsn = tempStr
-    data.rsuName = tempStr
+    data.rsuId = curClientId || ''
+    data.rsuEsn = curClientId || ''
+    data.rsuName = curClientId || ''
     return JSON.stringify(data)
 }
