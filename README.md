@@ -6,10 +6,10 @@ devices connections, subscriptions, publishing messages, etc... with the MQTT se
 ## Build image & deploy
 
 ```bash
-DOCKER_NAME=ROADMOCKER
+DOCKER_NAME=roadmocker
 DOCKER_IMAGE=99cloud/${DOCKER_NAME}
 
-docker build -t ${DOCKER_IMAGE} -f Dockerfile ..
+docker build -t ${DOCKER_IMAGE} -f Dockerfile .
 docker push ${DOCKER_IMAGE}
 
 docker stop ${DOCKER_NAME}; docker rm ${DOCKER_NAME}
