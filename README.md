@@ -7,7 +7,7 @@ devices connections, subscriptions, publishing messages, etc... with the MQTT se
 
 ```bash
 DOCKER_NAME=roadmocker
-DOCKER_IMAGE=99cloud/${DOCKER_NAME}
+DOCKER_IMAGE=openv2x/${DOCKER_NAME}
 
 docker build -t ${DOCKER_IMAGE} -f Dockerfile .
 docker push ${DOCKER_IMAGE}
