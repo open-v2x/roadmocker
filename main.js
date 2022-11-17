@@ -16,6 +16,8 @@ let connectionForm,
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
+const locationHref = window.location.href;
+// const locationHref = 'http://47.100.126.13:6688/';
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/)
 
@@ -41,12 +43,17 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
         {name: "msg_VIR_DNP", topic: topicReplace(`V2X.RSU.${esn}.VIR.UP`, delimiter), description: "逆向超车场景，车辆请求信息"},
         {name: "SDS_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "数据共享场景，轨迹数据"},
         {name: "msg_VIR_SDS", topic: topicReplace(`V2X.RSU.${esn}.VIR.UP`, delimiter), description: "数据共享场景，车辆请求信息"},
+        {name: "cross", topic: topicReplace(`V2X.RADAR.${esn}.CROSS.UP`, delimiter), description: "毫米波雷达，过车信息数据", isRadar: true},
+        {name: "event", topic: topicReplace(`V2X.RADAR.${esn}.EVENT.UP`, delimiter), description: "毫米波雷达，异常事件数据", isRadar: true},
+        {name: "flow", topic: topicReplace(`V2X.RADAR.${esn}.FLOW.UP`, delimiter), description: "毫米波雷达，交通流数据", isRadar: true},
+        {name: "status", topic: topicReplace(`V2X.RADAR.${esn}.STATUS.UP`, delimiter), description: "毫米波雷达，交通状态数据", isRadar: true},
+        {name: "track", topic: topicReplace(`V2X.RADAR.${esn}.TRACK.UP`, delimiter), description: "毫米波雷达，车轨迹数据", isRadar: true},
     ];
 };
 
 $(function () {
     host = window.location.hostname;
-    data_set_server = window.location.href + 'test-data'
+    data_set_server = `${locationHref}test-data`;
     $("#host").val(host);
 
     colorPicker = $("#color");
@@ -102,9 +109,14 @@ function initTable() {
                 title: "Action",
                 align: "center",
                 formatter: function (value, row, index) {
-                    const {name} = row;
+                    const { name, isRadar } = row;
+                    let link = `${data_set_server}/${name}.json`;
+                    if (isRadar) {
+                      const server = `${locationHref}radar-test-data`;
+                      link = `${server}/${name}.json`;
+                    }
 
-                    var result = `<a href="${data_set_server}/${name}.json" target="blank">
+                    var result = `<a href="${link}" target="blank">
                           <button id="preview-${name}" type="button" class="btn btn-primary">Preview</button>
                       </a>`;
                     result += `<button type="button" id="loading-${name}" class="btn btn-warning loading-hidden" disabled>Loading</button>`
@@ -170,8 +182,17 @@ function loadedAni(name, res) {
     $("#preview-" + name).removeClass("preview-hidden")
 }
 
+function setServer(isRadar) {
+  if (isRadar) {
+    data_set_server = `${locationHref}radar-test-data`;
+  } else {
+    data_set_server = `${locationHref}test-data`;
+  }
+}
+
 function getCheckedRowData(row) {
-    const {name} = row;
+    const { name, isRadar } = row;
+    setServer(isRadar);
     loadingAni(name)
     const xhr = $.ajax({
         url: `${data_set_server}/${name}.json`,
@@ -711,6 +732,11 @@ const defaultData = [
     "VPTC_CW_track_turn",
     "video_track",
     "radar_track",
+    "cross",
+    "event",
+    "flow",
+    "status",
+    "track",
 ];
 
 function isIntervalData(name) {
