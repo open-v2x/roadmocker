@@ -16,8 +16,8 @@ let connectionForm,
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-// const locationHref = window.location.href;
-const locationHref = 'http://47.100.126.13:6688/';
+const locationHref = window.location.href;
+// const locationHref = 'http://47.100.126.13:6688/';
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/)
 
