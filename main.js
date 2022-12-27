@@ -16,8 +16,8 @@ let connectionForm,
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-const locationHref = window.location.href;
-// const locationHref = 'http://47.100.126.13:6688/';
+// const locationHref = window.location.href;
+const locationHref = 'http://47.100.126.13:6688/';
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/)
 
@@ -48,7 +48,15 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
         {name: "flow", topic: topicReplace(`V2X.RADAR.${esn}.FLOW.UP`, delimiter), description: "毫米波雷达，交通流数据", isRadar: true},
         {name: "status", topic: topicReplace(`V2X.RADAR.${esn}.STATUS.UP`, delimiter), description: "毫米波雷达，交通状态数据", isRadar: true},
         {name: "track", topic: topicReplace(`V2X.RADAR.${esn}.TRACK.UP`, delimiter), description: "毫米波雷达，车轨迹数据", isRadar: true},
+        {name: "RW_track", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "车辆逆行数据"},
+        {name: "congestion", topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter), description: "车辆拥堵数据"},
     ];
+};
+
+const cooperMap = {
+    CLC_track: "msg_VIR_CLC",
+    DNP_track: "msg_VIR_DNP",
+    SDS_track: "msg_VIR_SDS",
 };
 
 $(function () {
@@ -371,11 +379,6 @@ function handlePublish() {
     event.preventDefault();
 }
 
-const cooperMap = {
-    CLC_track: "msg_VIR_CLC",
-    DNP_track: "msg_VIR_DNP",
-    SDS_track: "msg_VIR_SDS"
-};
 
 /* publish 数据集 */
 function handlePublishDataset() {
@@ -737,6 +740,8 @@ const defaultData = [
     "flow",
     "status",
     "track",
+    "RW_track",
+    "congestion"
 ];
 
 function isIntervalData(name) {
