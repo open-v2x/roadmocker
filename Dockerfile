@@ -12,5 +12,4 @@ RUN mkdir radar-test-data
 RUN mkdir congestion
 RUN tar zxvf test_data.tar.gz -C test-data && chmod 644 test-data/*.json && rm -rf test-data/.*json* && rm -rf test-data/.*DS_Store*
 RUN tar zxvf radar_test_data.tar.gz -C radar-test-data && chmod 644 radar-test-data/*.json
-RUN tar zxvf congestion.tar.gz -C congestion && chmod 644 congestion/*.json
 RUN ls test-data/* | awk '{print $1 " <br/>"}' > test-data/index.html
