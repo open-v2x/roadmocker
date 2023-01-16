@@ -558,7 +558,7 @@ function handlePublishDataset() {
     datasetForm = datasetForm || $("#datasetForm");
     const datasetFormData = convertFormData(datasetForm.serializeArray());
     const rsu = formData.clientId;
-    const code = formData.intersectionCode;
+    const code = datasetFormData.intersectionCode;
     const delimiter = datasetFormData.topicDelimiter;
 
     const topic = dataSetConfig(rsu, code, delimiter).find(
