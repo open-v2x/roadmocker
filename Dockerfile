@@ -1,6 +1,15 @@
 FROM docker.io/library/nginx:stable
 
-LABEL purpose="ROADMOCKER"
+ARG REPO_URL
+ARG GIR_BRANCH
+ARG GIT_COMMIT
+ARG RELEASE_VERSION
+
+LABEL purpose="ROADMOCKER" \
+      roadmocker.build_branch=${GIT_BRANCH} \
+      roadmocker.build_commit=${GIT_COMMIT} \
+      roadmocker.repo_url=${REPO_URL} \
+      roadmocker.release_version=${RELEASE_VERSION}
 
 WORKDIR /usr/share/nginx/html
 
