@@ -16,8 +16,8 @@ ajaxList = new Map();
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-const locationHref = window.location.href;
-// const locationHref = 'http://47.100.126.13:6688/';
+// const locationHref = window.location.href;
+const locationHref = 'http://47.100.126.13:6688/';
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/);
 
@@ -142,6 +142,11 @@ const dataSetConfig = (esn = "", code = "", delimiter = "/") => {
       name: "congestion",
       topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
       description: "车辆拥堵数据",
+    },
+    {
+      name: "spat",
+      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      description: "信号灯数据",
     },
   ];
 };
