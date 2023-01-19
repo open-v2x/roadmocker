@@ -16,8 +16,8 @@ ajaxList = new Map();
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-// const locationHref = window.location.href;
-const locationHref = 'http://47.100.126.13:6688/';
+const locationHref = window.location.href;
+// const locationHref = 'http://47.100.126.13:6688/';
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/);
 
@@ -26,7 +26,7 @@ const topicReplace = (topic, delimiter = "/") => {
 };
 
 // Msg_VIR：车辆意图和请求（Message: Vehicle Intention And Request）
-const dataSetConfig = (esn = "", code = "", delimiter = "/") => {
+const dataSetConfig = (esn = "", delimiter = "/") => {
   return [
     {
       name: "RSU_INFO",
@@ -35,89 +35,89 @@ const dataSetConfig = (esn = "", code = "", delimiter = "/") => {
     },
     {
       name: "RSU_MAP",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.MAP.UP`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.MAP.UP`, delimiter),
       description: "上报MAP信息",
     },
     {
       name: "RSI_data",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSI.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSI.UP.DAWNLINE`, delimiter),
       description: "RSI上报数据",
     },
     {
       name: "video_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "视频检测数据",
     },
     {
       name: "radar_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "毫米波雷达检测数据",
     },
     {
       name: "multi_source_fusion_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "雷视融合算法，测试轨迹数据",
     },
     {
       name: "ICW_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP`, delimiter),
       description: "交叉口车辆间碰撞预警场景，轨迹数据",
     },
     {
       name: "VPTC_CW_track_stright",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "弱势交通参与者碰撞预警场景，车辆直行",
     },
     {
       name: "VPTC_CW_track_turn",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "弱势交通参与者碰撞预警场景，车辆转向",
     },
     {
       name: "CLC_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "协作换道场景，轨迹数据",
     },
     {
       name: "msg_VIR_CLC",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.VIR.UP`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.VIR.UP`, delimiter),
       description: "协作换道场景，车辆请求信息",
     },
     {
       name: "DNP_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "逆向超车场景，轨迹数据",
     },
     {
       name: "msg_VIR_DNP",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.VIR.UP`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.VIR.UP`, delimiter),
       description: "逆向超车场景，车辆请求信息",
     },
     {
       name: "SDS_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "数据共享场景，轨迹数据",
     },
     {
       name: "msg_VIR_SDS",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.VIR.UP`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.VIR.UP`, delimiter),
       description: "数据共享场景，车辆请求信息",
     },
     {
       name: "cross",
-      topic: topicReplace(`V2X.RADAR.${esn}.${code}.CROSS.UP`, delimiter),
+      topic: topicReplace(`V2X.RADAR.${esn}.CROSS.UP`, delimiter),
       description: "毫米波雷达，过车信息数据",
       isRadar: true,
     },
     {
       name: "event",
-      topic: topicReplace(`V2X.RADAR.${esn}.${code}.EVENT.UP`, delimiter),
+      topic: topicReplace(`V2X.RADAR.${esn}.EVENT.UP`, delimiter),
       description: "毫米波雷达，异常事件数据",
       isRadar: true,
     },
     {
       name: "flow",
-      topic: topicReplace(`V2X.RADAR.${esn}.${code}.FLOW.UP`, delimiter),
+      topic: topicReplace(`V2X.RADAR.${esn}.FLOW.UP`, delimiter),
       description: "毫米波雷达，交通流数据",
       isRadar: true,
     },
@@ -129,23 +129,23 @@ const dataSetConfig = (esn = "", code = "", delimiter = "/") => {
     },
     {
       name: "track",
-      topic: topicReplace(`V2X.RADAR.${esn}.${code}.TRACK.UP`, delimiter),
+      topic: topicReplace(`V2X.RADAR.${esn}.TRACK.UP`, delimiter),
       description: "毫米波雷达，车轨迹数据",
       isRadar: true,
     },
     {
       name: "RW_track",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "车辆逆行数据",
     },
     {
       name: "congestion",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
       description: "车辆拥堵数据",
     },
     {
       name: "spat",
-      topic: topicReplace(`V2X.RSU.${esn}.${code}.RSM.UP.DAWNLINE`, delimiter),
+      topic: topicReplace(`V2X.RSU.${esn}.SPAT.UP`, delimiter),
       description: "信号灯数据",
     },
   ];
@@ -338,7 +338,6 @@ function toggleConnect(event) {
         username: formData.username,
         password: formData.password,
         clientId: formData.clientId,
-        intersectionCode: formData.intersectionCode,
         keepalive: formData.keepalive && parseInt(formData.keepalive),
       }
     );
@@ -563,10 +562,9 @@ function handlePublishDataset() {
     datasetForm = datasetForm || $("#datasetForm");
     const datasetFormData = convertFormData(datasetForm.serializeArray());
     const rsu = formData.clientId;
-    const code = formData.intersectionCode;
     const delimiter = datasetFormData.topicDelimiter;
 
-    const topic = dataSetConfig(rsu, code, delimiter).find(
+    const topic = dataSetConfig(rsu, delimiter).find(
       (it) => it.name === name
     ).topic;
 
