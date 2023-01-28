@@ -123,7 +123,7 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
     },
     {
       name: "status",
-      topic: topicReplace(`V2X.RADAR.${esn}.${code}.STATUS.UP`, delimiter),
+      topic: topicReplace(`V2X.RADAR.${esn}.STATUS.UP`, delimiter),
       description: "毫米波雷达，交通状态数据",
       isRadar: true,
     },
