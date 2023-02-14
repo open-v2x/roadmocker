@@ -16,8 +16,8 @@ ajaxList = new Map();
 let client, curClientId, protol, host, data_set_server;
 const TOPIC_COLOR_MAP = {};
 const SUBSCRIBED_TOPICS = [];
-const locationHref = window.location.href;
-// const locationHref = 'http://47.100.126.13:6688/';
+// const locationHref = window.location.href;
+const locationHref = "http://47.100.126.13:6688/";
 
 const clientIdReg = new RegExp(/^[a-zA-Z0-9_]+$/);
 
@@ -148,6 +148,16 @@ const dataSetConfig = (esn = "", delimiter = "/") => {
       topic: topicReplace(`V2X.RSU.${esn}.SPAT.UP`, delimiter),
       description: "信号灯数据",
     },
+    {
+      name: "overspeed_track",
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
+      description: "车辆超速数据",
+    },
+    {
+      name: "slower_speed_track",
+      topic: topicReplace(`V2X.RSU.${esn}.RSM.UP.DAWNLINE`, delimiter),
+      description: "车辆慢行数据",
+    },
   ];
 };
 
@@ -261,6 +271,7 @@ function initTable() {
 }
 
 function stopPublish(name) {
+  console.log("stop publish", name);
   for (let i = 0; i < rsmInterval.length; i++) {
     if (rsmInterval[i].name === name) {
       clearInterval(rsmInterval[i].interval);
@@ -879,6 +890,8 @@ const defaultData = [
   "track",
   "RW_track",
   "congestion",
+  "overspeed_track",
+  "slower_speed_track"
 ];
 
 function isIntervalData(name) {
